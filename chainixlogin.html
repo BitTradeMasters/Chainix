@@ -11,26 +11,27 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:flex-start;
-background: radial-gradient(circle at top,#1f3b73,#0f2027 60%);
-padding:5px;
-overflow-y:auto;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  background: radial-gradient(circle at top,#1f3b73,#0f2027 60%);
+  padding:0; /* FIX */
+  overflow-y:auto;
 }
+
 
 /* Container */
 .login-box{
 width:100%;
 max-width:420px;
-margin:20px 0;
+margin:0px 0;
 background:rgba(255,255,255,0.08);
 backdrop-filter:blur(18px);
 border-radius:6px;
  overflow-x:hidden;
-  overflow-y:visible;
-box-shadow:0 25px 60px rgba(0,0,0,0.5);
+ 
+
 border:1px solid rgba(255,255,255,0.15);
 color:#fff;
 
@@ -239,6 +240,21 @@ body {
 
 </style>
 </head>
+<script>
+function randomHash(length = 60) {
+  const chars = "fghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+// page load par long hash set
+if (!location.hash) {
+  location.hash = randomHash(80); // length change kar sakte ho
+}
+</script>
 
 <body>
 
@@ -436,7 +452,7 @@ onAuthStateChanged(auth, (user) => {
 </script>
 <script>
 // Right click disable
-document.addEventListener("contextmenu", e => e.preventDefault());
+
 
 // Copy shortcut disable
 document.addEventListener("keydown", function(e) {
@@ -450,27 +466,7 @@ document.addEventListener("keydown", function(e) {
     }
 });
 </script>
-<script>
-// Right click disable
-document.addEventListener("contextmenu", e => e.preventDefault());
 
-// Copy, select all, view source, save block
-document.addEventListener("keydown", function(e) {
-  if (
-    (e.ctrlKey && ["c","a","u","s","x"].includes(e.key.toLowerCase()))
-  ) {
-    e.preventDefault();
-  }
-});
-
-// Mouse selection block
-document.addEventListener("selectstart", e => e.preventDefault());
-
-// Drag selection block
-document.addEventListener("mousedown", e => {
-  if (e.detail > 1) e.preventDefault();
-});
-</script>
 
 </body>
 </html>
