@@ -222,7 +222,7 @@ const earnEl = document.getElementById("totalEarn");
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "login.html";
+    window.location.href = "chainix/chainixlogin.html";
     return;
   }
 
@@ -246,11 +246,11 @@ try {
 
   // real referral code from Firestore
   const actualRef = data.referralCode || user.uid;
-  const refLink = window.location.origin + "/register.html?ref=" + actualRef;
+  const refLink = window.location.origin + "chainix/chainixregister.html?ref=" + actualRef;
   refInput.value = refLink;
 
 } catch (e) {
-  const refLink = window.location.origin + "/register.html?ref=" + user.uid;
+  const refLink = window.location.origin + "chainix/chainixregister.html?ref=" + user.uid;
   refInput.value = refLink;
   balanceEl.textContent = "$0.00";
 }
@@ -273,5 +273,6 @@ logoutBtn.onclick = async () => {
 
 </body>
 </html>
+
 
 
