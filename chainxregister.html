@@ -233,6 +233,59 @@ cursor:pointer;
 .plan-icon-btn:hover{
 background:rgba(255,255,255,0.35);
 }
+
+/* Terms / Rules Box Styling */
+.terms-box{
+  margin-top:18px;
+  padding:16px;
+  background:rgba(255,255,255,0.08);
+  border-radius:8px;
+  font-size:13px;
+  line-height:1.6;
+  color:#e5e7eb;
+
+  max-height:190px;
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  border:1px solid rgba(255,255,255,0.12);
+  box-shadow:inset 0 0 12px rgba(0,0,0,0.2);
+}
+
+/* Title */
+.terms-box h3{
+  font-size:14px;
+  margin-bottom:10px;
+  color:#60a5fa;
+  font-weight:600;
+  text-align:center;
+}
+
+/* Paragraph spacing */
+.terms-box p{
+  margin-bottom:10px;
+  opacity:0.9;
+}
+
+/* Highlight important text */
+.terms-box b{
+  color:#22c55e;
+}
+
+/* Smooth scrollbar */
+.terms-box::-webkit-scrollbar{
+  width:6px;
+}
+
+.terms-box::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,0.35);
+  border-radius:10px;
+}
+
+.terms-box::-webkit-scrollbar-track{
+  background:transparent;
+}
+
 <style>
 body {
     -webkit-user-select: none;
@@ -250,21 +303,6 @@ body {
 
 </style>
 </head>
-<script>
-function randomHash(length = 60) {
-  const chars = "fghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
-}
-
-// page load par long hash set
-if (!location.hash) {
-  location.hash = randomHash(80); // length change kar sakte ho
-}
-</script>
 
 <body>
 
@@ -276,7 +314,7 @@ if (!location.hash) {
     <button class="plan-icon-btn"
         onclick="window.location.href='chainixplan.html'"
         title="View Plan">
-        📊
+        View Business Plan
     </button>
 </div>
 
@@ -322,6 +360,48 @@ Secure • Fast • Chainix Network
 </div>
 
 </div>
+<div class="terms-box">
+  <h3>Registration Rules & Account Guidelines</h3>
+
+  <p>
+    Please enter correct and genuine personal details while creating your
+    account. Incorrect or fake information may lead to account suspension.
+  </p>
+
+  <p>
+    Each user is allowed to create only one account. Multiple accounts from
+    the same device or person are not permitted and may be permanently blocked.
+  </p>
+
+  <p>
+    One device should be used for one account only. Creating multiple IDs
+    from the same device or network may result in restriction or account removal.
+  </p>
+
+  <p>
+    Always use your own email address and secure password. Do not share your
+    login credentials with anyone to avoid unauthorized access.
+  </p>
+
+  <p>
+    Make sure all wallet and payment details entered are correct. Transactions
+    sent to wrong details due to user mistake cannot be recovered.
+  </p>
+
+  <p>
+    Attempting fraud, misuse, or system manipulation may lead to immediate
+    account termination without notice.
+  </p>
+
+  <p>
+    Platform security rules may be updated anytime to keep the system safe
+    for all users.
+  </p>
+
+  <p><b>Important:</b> By registering, you agree to follow all platform rules
+  and maintain responsible account usage.</p>
+</div>
+
 </div>
 
 <!-- Popup same as before -->
@@ -540,6 +620,38 @@ document.addEventListener("selectstart", e => e.preventDefault());
 document.addEventListener("mousedown", e => {
   if (e.detail > 1) e.preventDefault();
 });
+</script>
+<script>
+(function () {
+
+  const params = new URLSearchParams(window.location.search);
+  const refFromLink = params.get("ref");
+  const refInput = document.getElementById("referral");
+
+  if (!refInput) return;
+
+  // agar link me referral hai
+  if (refFromLink) {
+    const code = refFromLink.toUpperCase();
+
+    refInput.value = code;
+    refInput.readOnly = true;
+    refInput.style.background = "rgba(255,255,255,0.25)";
+    refInput.style.cursor = "not-allowed";
+
+    localStorage.setItem("chainix_ref", code);
+  }
+
+  // reload hone par bhi referral rahe
+  const savedRef = localStorage.getItem("chainix_ref");
+  if (!refFromLink && savedRef) {
+    refInput.value = savedRef;
+    refInput.readOnly = true;
+    refInput.style.background = "rgba(255,255,255,0.25)";
+    refInput.style.cursor = "not-allowed";
+  }
+
+})();
 </script>
 
 </body>
