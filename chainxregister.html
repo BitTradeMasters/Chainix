@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Chainix – Register</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@ display:flex;
 justify-content:center;
 align-items:flex-start; /* center ki jagah */
 background: radial-gradient(circle at top,#1f3b73,#0f2027 60%);
-padding:10px;
+padding:5px;
 overflow-y:auto;
 }
 
@@ -233,6 +233,20 @@ cursor:pointer;
 .plan-icon-btn:hover{
 background:rgba(255,255,255,0.35);
 }
+<style>
+body {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+</style>
+<style>
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+</style>
 
 </style>
 </head>
@@ -474,7 +488,44 @@ console.assert(typeof togglePass === "function", "togglePass should exist");
 console.assert(typeof showPopup === "function", "showPopup should exist");
 
 </script>
+<script>
+// Right click disable
+document.addEventListener("contextmenu", e => e.preventDefault());
 
+// Copy shortcut disable
+document.addEventListener("keydown", function(e) {
+    if (
+        (e.ctrlKey && e.key === "c") ||
+        (e.ctrlKey && e.key === "u") ||
+        (e.ctrlKey && e.key === "s") ||
+        (e.ctrlKey && e.key === "a")
+    ) {
+        e.preventDefault();
+    }
+});
+</script>
+
+<script>
+// Right click disable
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// Copy, select all, view source, save block
+document.addEventListener("keydown", function(e) {
+  if (
+    (e.ctrlKey && ["c","a","u","s","x"].includes(e.key.toLowerCase()))
+  ) {
+    e.preventDefault();
+  }
+});
+
+// Mouse selection block
+document.addEventListener("selectstart", e => e.preventDefault());
+
+// Drag selection block
+document.addEventListener("mousedown", e => {
+  if (e.detail > 1) e.preventDefault();
+});
+</script>
 
 </body>
 </html>
