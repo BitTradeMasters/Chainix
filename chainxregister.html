@@ -490,6 +490,8 @@ form.addEventListener("submit", async (e) => {
 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
+    const wallet = document.getElementById("wallet").value.trim();
+
     const pass = document.getElementById("password").value;
     const confirm = document.getElementById("confirmPassword").value;
     const ref = document.getElementById("referral").value.trim().toUpperCase();
@@ -535,6 +537,7 @@ form.addEventListener("submit", async (e) => {
       uid: userCred.user.uid,
       name,
       email,
+      wallet, // ✅ added
       referralCode: newCode,
       referredBy: ref || null,
       createdAt: new Date().toISOString()
