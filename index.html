@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chainix – Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  min-height:100vh;
+  background: radial-gradient(circle at top,#1f3b73,#0f2027 60%);
+  color:#fff;
+}
+
+.wrapper{
+  max-width:1200px;
+  margin:auto;
+  padding:20px 16px 50px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.logo{
+  font-size:clamp(20px,4vw,26px);
+  font-weight:700;
+}
+
+.logout-btn{
+  padding:9px 16px;
+  border-radius:12px;
+  border:none;
+  background:#ef4444;
+  color:#fff;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.grid{
+  display:grid;
+  gap:16px;
+}
+
+@media(min-width:640px){
+  .grid{grid-template-columns:repeat(2,1fr);} 
+}
+
+@media(min-width:1024px){
+  .grid{grid-template-columns:repeat(3,1fr);} 
+}
+
+.card{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(18px);
+  border-radius:20px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,0.15);
+  box-shadow:0 20px 45px rgba(0,0,0,0.45);
+  transition:0.25s ease;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 25px 55px rgba(0,0,0,0.55);
+}
+
+.card h3{
+  font-size:15px;
+  margin-bottom:12px;
+  opacity:0.85;
+}
+
+.balance{
+  font-size:30px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+
+.small{
+  font-size:12px;
+  opacity:0.75;
+}
+
+.ref-box{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.ref-box input{
+  flex:1;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  font-size:12px;
+}
+
+.copy-btn{
+  padding:10px 14px;
+  border:none;
+  border-radius:10px;
+  background:#22c55e;
+  color:#fff;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.action-btn{
+  width:100%;
+  margin-top:10px;
+  padding:11px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  color:#fff;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.stat{
+  font-size:22px;
+  font-weight:600;
+}
+
+.footer{
+  text-align:center;
+  margin-top:34px;
+  font-size:12px;
+  opacity:0.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <div class="header">
+    <div class="logo">Chainix Dashboard</div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Wallet Balance</h3>
+      <div class="balance" id="balance">$0.00</div>
+      <div class="small">Main account balance</div>
+      <button class="action-btn">Deposit</button>
+      <button class="action-btn">Withdraw</button>
+    </div>
+
+    <div class="card">
+      <h3>Your Referral Link</h3>
+      <div class="ref-box">
+        <input type="text" id="refLink" readonly>
+        <button class="copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="small" style="margin-top:10px;">Share & earn rewards</div>
+    </div>
+
+    <div class="card">
+      <h3>Account Info</h3>
+      <p id="userEmail" class="small"></p>
+    </div>
+
+    <div class="card">
+      <h3>Total Referrals</h3>
+      <div class="stat" id="totalRefs">0</div>
+      <div class="small">People joined from your link</div>
+    </div>
+
+    <div class="card">
+      <h3>Total Earnings</h3>
+      <div class="stat" id="totalEarn">$0.00</div>
+      <div class="small">Referral + bonus income</div>
+    </div>
+
+    <div class="card">
+      <h3>Security Status</h3>
+      <div class="small">Email verified & account protected</div>
+    </div>
+
+  </div>
+
+  <div class="footer">© 2026 Chainix Network • Secure Crypto System</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUA92fON4_zoyy0fr_VIRJi30M9y0ep6k",
+  authDomain: "chainix-e190c.firebaseapp.com",
+  projectId: "chainix-e190c",
+  storageBucket: "chainix-e190c.firebasestorage.app",
+  messagingSenderId: "858117995805",
+  appId: "1:858117995805:web:cd394dbb9e9228f04575f4"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const balanceEl = document.getElementById("balance");
+const emailEl = document.getElementById("userEmail");
+const refInput = document.getElementById("refLink");
+const refsEl = document.getElementById("totalRefs");
+const earnEl = document.getElementById("totalEarn");
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  emailEl.textContent = user.email;
+try {
+  // Direct user document by UID (best & fastest way)
+  const snap = await getDoc(doc(db, "users", user.uid));
+
+  if (!snap.exists()) {
+    // fallback
+    const refLink = window.location.origin + "/register.html?ref=" + user.uid;
+    refInput.value = refLink;
+    balanceEl.textContent = "$0.00";
+    return;
+  }
+
+  const data = snap.data();
+
+  // balance
+  balanceEl.textContent = "$" + (data.balance || 0).toFixed(2);
+
+  // real referral code from Firestore
+  const actualRef = data.referralCode || user.uid;
+  const refLink = window.location.origin + "/register.html?ref=" + actualRef;
+  refInput.value = refLink;
+
+} catch (e) {
+  const refLink = window.location.origin + "/register.html?ref=" + user.uid;
+  refInput.value = refLink;
+  balanceEl.textContent = "$0.00";
+}
+
+});
+
+// copy referral
+copyBtn.onclick = () => {
+  navigator.clipboard.writeText(refInput.value);
+  copyBtn.textContent = "Copied";
+  setTimeout(()=> copyBtn.textContent = "Copy",1500);
+};
+
+// logout
+logoutBtn.onclick = async () => {
+  await signOut(auth);
+  window.location.href = "login.html";
+};
+</script>
+
+</body>
+</html>

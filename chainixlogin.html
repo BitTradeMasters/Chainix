@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chainix – Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+background: radial-gradient(circle at top,#1f3b73,#0f2027 60%);
+padding:10px;
+overflow-y:auto;
+}
+
+/* Container */
+.login-box{
+width:100%;
+max-width:420px;
+margin:20px 0;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(18px);
+border-radius:6px;
+ overflow-x:hidden;
+  overflow-y:visible;
+box-shadow:0 25px 60px rgba(0,0,0,0.5);
+border:1px solid rgba(255,255,255,0.15);
+color:#fff;
+
+}
+
+/* Header */
+.top-header{
+padding:22px;
+text-align:center;
+background:linear-gradient(135deg,#00c6ff,#0072ff);
+font-size:22px;
+font-weight:700;
+}
+
+.form-area{padding:24px;}
+
+.input-group{margin-bottom:14px;position:relative;}
+
+.input-group input{
+width:100%;
+padding:14px;
+border-radius:5px;
+border:none;
+outline:none;
+background:rgba(255,255,255,0.12);
+color:#fff;
+font-size:14px;
+}
+
+.input-group input::placeholder{
+color:rgba(255,255,255,0.75);
+}
+
+.eye{
+position:absolute;
+right:14px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+font-size:14px;
+}
+
+/* Buttons */
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:5px;
+background:linear-gradient(135deg,#00c6ff,#0072ff);
+color:#fff;
+font-weight:600;
+cursor:pointer;
+margin-top:10px;
+font-size:15px;
+}
+
+button:disabled{
+opacity:0.6;
+cursor:not-allowed;
+}
+
+.secondary-btn{
+background:transparent;
+border:1px solid #22c55e;
+color:#22c55e;
+}
+
+.footer{
+margin-top:15px;
+text-align:center;
+font-size:13px;
+opacity:0.7;
+}
+
+/* Loading spinner */
+button.loading{
+opacity:.8;
+pointer-events:none;
+}
+
+button.loading::after{
+content:"";
+width:16px;
+height:16px;
+border:2px solid #fff;
+border-top:2px solid transparent;
+border-radius:50%;
+display:inline-block;
+margin-left:8px;
+animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg);}
+}
+
+/* Popup */
+.popup{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.popup-box{
+background:#0f172a;
+padding:24px;
+border-radius:5px;
+text-align:center;
+max-width:320px;
+width:90%;
+color:#fff;
+animation: popupIn .4s ease;
+}
+
+.popup-box.error { border:2px solid #ff4d4f; }
+.popup-box.success { border:2px solid #22c55e; }
+.popup-box.info { border:2px solid #3b82f6; }
+
+.popup-box.error h3 { color:#ff4d4f; }
+.popup-box.success h3 { color:#22c55e; }
+.popup-box.info h3 { color:#3b82f6; }
+
+@keyframes popupIn{
+0%{transform:translateY(-40px) scale(.9);opacity:0;}
+60%{transform:translateY(10px) scale(1.02);}
+100%{transform:translateY(0) scale(1);opacity:1;}
+}
+
+.popup-box.out{
+animation:popupOut .35s ease forwards;
+}
+
+@keyframes popupOut{
+to{transform:translateY(-40px);opacity:0;}
+}
+
+.terms-box{
+  margin-top:15px;
+  padding:14px;
+  padding-right:4px;
+  background:rgba(255,255,255,0.06);
+  border-radius:5px;
+  font-size:12px;
+  line-height:1.5;
+
+  max-height:150px;
+  overflow-y:auto;
+  overflow-x:hidden;
+padding-right:4px;
+
+  border:none;
+}
+
+
+.terms-box h3{
+  font-size:13px;
+  margin-bottom:6px;
+  color:#60a5fa;
+}
+
+/* Mobile optimization */
+@media (max-width:480px){
+  .terms-box{
+    font-size:11px;
+    max-height:130px;
+  }
+}
+
+/* Tablet & desktop */
+@media (min-width:768px){
+  .terms-box{
+    font-size:13px;
+    max-height:180px;
+  }
+}
+.terms-box::-webkit-scrollbar{
+  width:6px;
+}
+
+.terms-box::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+.terms-box::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,0.3);
+  border-radius:10px;
+}
+<style>
+body {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+</style>
+<style>
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+</style>
+
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+<div class="top-header">Chainix Login</div>
+
+<div class="form-area">
+<form id="loginForm">
+
+<div class="input-group">
+<input type="email" placeholder="Email Address" id="email" required>
+</div>
+
+<div class="input-group">
+<input type="password" placeholder="Password" id="password" required>
+<span class="eye" onclick="togglePass('password')">👁</span>
+</div>
+
+<button type="submit" id="loginBtn">Login Account</button>
+
+<div style="text-align:right;margin-top:8px;">
+<a href="#" id="forgotPass" style="font-size:12px;color:#60a5fa;text-decoration:none;">
+Forgot password?
+</a>
+</div>
+
+</form>
+
+<button class="secondary-btn"
+onclick="window.location.href='chainxregister.html'">
+Create new account
+</button>
+
+<div class="footer">
+Secure • Fast • Chainix Network
+</div>
+<div class="terms-box">
+  <h3>Terms, Conditions & Risk Notice</h3>
+  <p>
+    By creating an account and using Chainix services, you agree to our
+    platform terms and conditions.
+  </p>
+
+  <p>
+    Digital asset and network-based earning services involve financial risk.
+    Profits are not guaranteed and market conditions may cause loss or
+    reduced earnings.
+  </p>
+
+  <p>
+    Users are responsible for their own investment decisions. Only invest
+    funds that you can afford to lose.
+  </p>
+
+  <p>
+    Chainix is not responsible for personal financial losses caused by
+    market changes, user mistakes, or technical issues.
+  </p>
+
+  <p><b>Use the platform responsibly and at your own risk.</b></p>
+</div>
+
+</div>
+</div>
+
+<div id="popup" class="popup">
+<div class="popup-box">
+<h3 id="popupTitle"></h3>
+<p id="popupMessage"></p>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUA92fON4_zoyy0fr_VIRJi30M9y0ep6k",
+  authDomain: "chainix-e190c.firebaseapp.com",
+  projectId: "chainix-e190c",
+  storageBucket: "chainix-e190c.firebasestorage.app",
+  messagingSenderId: "858117995805",
+  appId: "1:858117995805:web:cd394dbb9e9228f04575f4"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.togglePass = function(id){
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+};
+
+function showPopup(title, message, type="info", redirect=false){
+  const popup = document.getElementById("popup");
+  const box = popup.querySelector(".popup-box");
+
+  box.classList.remove("error","success","info","out");
+  box.classList.add(type);
+
+  document.getElementById("popupTitle").innerText = title;
+  document.getElementById("popupMessage").innerText = message;
+
+  popup.style.display = "flex";
+
+  setTimeout(()=> box.classList.add("out"), 2000);
+
+  setTimeout(()=>{
+    popup.style.display = "none";
+    box.classList.remove("out");
+
+    if(redirect){
+      window.location.href = "index.html";
+    }
+  },2300);
+}
+
+const form = document.getElementById("loginForm");
+const btn = document.getElementById("loginBtn");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if(btn.classList.contains("loading")) return;
+
+  btn.classList.add("loading");
+  btn.disabled = true;
+
+  const email = document.getElementById("email").value.trim();
+  const pass = document.getElementById("password").value;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    showPopup("Success", "Login successful", "success", true); }
+
+ catch (err) {
+  let message = "Login failed";
+
+  if (err.code === "auth/invalid-credential") {
+
+    const methods = await fetchSignInMethodsForEmail(auth, email);
+
+    if (methods.length === 0) {
+      message = "No account found with this email";
+    } else {
+      message = "Incorrect password";
+    }
+
+  }
+  else if (err.code === "auth/invalid-email") {
+    message = "Email format is invalid";
+  }
+  else if (err.code === "auth/too-many-requests") {
+    message = "Too many attempts. Try again later";
+  }
+  else if (err.code === "auth/network-request-failed") {
+    message = "Network error. Check internet";
+  }
+
+  showPopup("Login Error", message, "error");
+}
+
+  finally {
+    btn.disabled = false;
+    btn.classList.remove("loading");
+  }
+});
+
+// Forgot password
+document.getElementById("forgotPass").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    showPopup("Error", "Enter email first", "error");
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showPopup("Email Sent", "Password reset link sent", "success");
+  } catch {
+    showPopup("Error", "Failed to send reset email", "error");
+  }
+});
+
+// Auto redirect if already logged in
+onAuthStateChanged(auth, (user) => {
+  if (user && user.emailVerified) {
+    window.location.href = "index.html";
+  }
+});
+</script>
+<script>
+// Right click disable
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// Copy shortcut disable
+document.addEventListener("keydown", function(e) {
+    if (
+        (e.ctrlKey && e.key === "c") ||
+        (e.ctrlKey && e.key === "u") ||
+        (e.ctrlKey && e.key === "s") ||
+        (e.ctrlKey && e.key === "a")
+    ) {
+        e.preventDefault();
+    }
+});
+</script>
+<script>
+// Right click disable
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// Copy, select all, view source, save block
+document.addEventListener("keydown", function(e) {
+  if (
+    (e.ctrlKey && ["c","a","u","s","x"].includes(e.key.toLowerCase()))
+  ) {
+    e.preventDefault();
+  }
+});
+
+// Mouse selection block
+document.addEventListener("selectstart", e => e.preventDefault());
+
+// Drag selection block
+document.addEventListener("mousedown", e => {
+  if (e.detail > 1) e.preventDefault();
+});
+</script>
+
+</body>
+</html>
