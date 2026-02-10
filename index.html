@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Chainix – Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -19,6 +19,11 @@ body{
   max-width:1200px;
   margin:auto;
   padding:20px 16px 50px;
+}
+.wrapper{
+  max-width:1200px;
+  margin:auto;
+  padding:80px 6px 10px; /* TOP padding fix */
 }
 
 .header{
@@ -37,7 +42,7 @@ body{
 
 .logout-btn{
   padding:9px 16px;
-  border-radius:12px;
+  border-radius:5px;
   border:none;
   background:#ef4444;
   color:#fff;
@@ -61,10 +66,10 @@ body{
 .card{
   background:rgba(255,255,255,0.08);
   backdrop-filter:blur(18px);
-  border-radius:20px;
+  border-radius:5px;
   padding:22px;
   border:1px solid rgba(255,255,255,0.15);
-  box-shadow:0 20px 45px rgba(0,0,0,0.45);
+ 
   transition:0.25s ease;
 }
 
@@ -99,7 +104,7 @@ body{
 .ref-box input{
   flex:1;
   padding:10px;
-  border-radius:10px;
+  border-radius:5px;
   border:none;
   font-size:12px;
 }
@@ -107,7 +112,7 @@ body{
 .copy-btn{
   padding:10px 14px;
   border:none;
-  border-radius:10px;
+  border-radius:5px;
   background:#22c55e;
   color:#fff;
   cursor:pointer;
@@ -119,7 +124,7 @@ body{
   margin-top:10px;
   padding:11px;
   border:none;
-  border-radius:12px;
+  border-radius:5px;
   background:linear-gradient(135deg,#00c6ff,#0072ff);
   color:#fff;
   cursor:pointer;
@@ -137,17 +142,210 @@ body{
   font-size:12px;
   opacity:0.6;
 }
+
+.menu-btn{
+  font-size:22px;
+  padding:8px 12px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-240px;
+  width:240px;
+  height:100%;
+  background:#111827;
+  padding:20px 15px;
+  transition:0.3s;
+  z-index:999;
+  display:flex;
+  flex-direction:column;
+}
+
+.sidebar.active{
+  left:0;
+}
+
+.menu a{
+  display:flex;
+  align-items:center;
+  padding:14px 12px;
+  color:#e5e7eb;
+  text-decoration:none;
+  border-radius:5px;
+  margin-bottom:6px;
+  font-size:14px;
+  transition:.2s;
+}
+
+.menu a:hover{
+  background:#1f2937;
+}
+
+.menu .text{
+  margin-left:10px;
+  flex:1;
+}
+
+/* Wave style icon */
+.wave-icon{
+  width:18px;
+  height:18px;
+  border-radius:5px;
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  position:relative;
+  overflow:hidden;
+}
+
+.wave-icon::after{
+  content:"";
+  position:absolute;
+  width:200%;
+  height:200%;
+  background:rgba(255,255,255,0.2);
+  top:50%;
+  left:-50%;
+  transform:translateY(-50%);
+  border-radius:5px;
+  animation:waveMove 3s linear infinite;
+}
+
+@keyframes waveMove{
+  from{transform:translateY(-50%) rotate(0deg);}
+  to{transform:translateY(-50%) rotate(360deg);}
+}
+
+.arrow{
+  opacity:.5;
+}
+.menu-bottom{
+  margin-top:auto;
+  padding:15px 0;
+}
+
+#menuLogoutBtn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:5px;
+  background:#ef4444;
+  color:#fff;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:500;
+  transition:.2s;
+}
+
+#menuLogoutBtn:hover{
+  background:#dc2626;
+}
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:998;
+}
+
+.overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+/* Header fixed */
+.top-bar,
+.header,
+.dashboard-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  z-index: 1000;
+  background: #0043ca; /* apna header color */
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+}
+
+/* Body content scrollable */
+.page-content,
+.main-content,
+.dashboard-content {
+  margin-top: 60px;   /* header height */
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  padding: 15px;
+}
+
 </style>
 </head>
 
 <body>
+<div class="overlay" id="overlay"></div>
 
 <div class="wrapper">
+<div class="header">
+  <button id="menuBtn" class="menu-btn">☰</button>
+  <div class="logo">Chainix Dashboard</div>
+ 
+</div>
 
-  <div class="header">
-    <div class="logo">Chainix Dashboard</div>
-    <button class="logout-btn" id="logoutBtn">Logout</button>
+<div class="sidebar" id="sidebar">
+
+<div class="menu">
+  <a href="#">
+    <span class="wave-icon"></span>
+    <span class="text">Dashboard</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <a href="#">
+    <span class="wave-icon"></span>
+    <span class="text">Deposit</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <a href="#">
+    <span class="wave-icon"></span>
+    <span class="text">Withdraw</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <a href="#">
+    <span class="wave-icon"></span>
+    <span class="text">My Team</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <a href="#">
+    <span class="wave-icon"></span>
+    <span class="text">Income</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <a href="#">
+    <span class="wave-icon"></span>
+    <span class="text">Settings</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <a href="#">
+    <span class="wave-icon"></span>
+    <span class="text">Support</span>
+    <span class="arrow">›</span>
+  </a>
+</div>
+
+  <div class="menu-bottom">
+    <button id="menuLogoutBtn">Logout</button>
   </div>
+
+</div>
 
   <div class="grid">
 
@@ -266,12 +464,27 @@ copyBtn.onclick = () => {
   setTimeout(()=> copyBtn.textContent = "Copy",1500);
 };
 
-// logout
-logoutBtn.onclick = async () => {
-  await signOut(auth);
-  window.location.href = "chainixlogin.html";
+
+
+</script>
+<script>
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+
+// Open / close menu
+menuBtn.onclick = () => {
+  sidebar.classList.toggle("active");
+  overlay.classList.toggle("active");
+};
+
+// Click outside close
+overlay.onclick = () => {
+  sidebar.classList.remove("active");
+  overlay.classList.remove("active");
 };
 </script>
+
 
 </body>
 </html>
